@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import mongoose from 'mongoose';
 import { env } from '../config/env.js';
 import { User, type IUser, type TargetGoal } from '../models/User.js';
 import type { AuthTokenPayload, UserProfileResponse } from '../types/auth.js';
@@ -73,7 +74,12 @@ export async function getUserById(id: string): Promise<IUser> {
 export function verifyToken(token: string): string {
   try {
     const decoded = jwt.verify(token, env.jwtSecret);
-    if (typeof decoded === 'string' || typeof decoded.sub !== 'string') {
+    if (
+      typeof decoded === 'string' ||
+      typeof decoded.sub !== 'string' ||
+      !/^[a-f\d]{24}$/i.test(decoded.sub) ||
+      !mongoose.isValidObjectId(decoded.sub)
+    ) {
       throw new ApiError(401, 'Invalid authentication token');
     }
     return decoded.sub;

@@ -1,44 +1,22 @@
 import { useState, type ReactNode } from 'react';
-import type { WorkoutSession, WorkoutExerciseItem, WorkoutSet } from '@/types';
-import { MOCK_EXERCISES } from '@/services/mockData';
+import type { WorkoutSession, WorkoutSet } from '@/types';
 import { WorkoutContext } from './workout-context-def';
 
 export function WorkoutProvider({ children }: { children: ReactNode }) {
   const [activeSession, setActiveSession] = useState<WorkoutSession | null>(null);
   const [activeSeconds, setActiveSeconds] = useState(0);
 
-  const startSession = (title = 'Hypertrophy Alpha Routine') => {
-    const initialExercises: WorkoutExerciseItem[] = [
-      {
-        exerciseId: MOCK_EXERCISES[0].id,
-        exercise: MOCK_EXERCISES[0],
-        sets: [
-          { setNumber: 1, reps: 8, weightKg: 100, completed: false },
-          { setNumber: 2, reps: 8, weightKg: 100, completed: false },
-          { setNumber: 3, reps: 8, weightKg: 100, completed: false },
-        ],
-      },
-      {
-        exerciseId: MOCK_EXERCISES[1].id,
-        exercise: MOCK_EXERCISES[1],
-        sets: [
-          { setNumber: 1, reps: 10, weightKg: 32, completed: false },
-          { setNumber: 2, reps: 10, weightKg: 32, completed: false },
-          { setNumber: 3, reps: 8, weightKg: 34, completed: false },
-        ],
-      },
-    ];
-
+  const startSession = (title = 'Workout Session') => {
     setActiveSession({
       id: `wk_active_${Date.now()}`,
       title,
       startTime: new Date().toISOString(),
       durationMinutes: 0,
-      exercises: initialExercises,
+      exercises: [],
       status: 'in-progress',
-      averageFormScore: 95,
-      caloriesBurned: 120,
-      totalVolumeKg: 3240,
+      averageFormScore: 0,
+      caloriesBurned: 0,
+      totalVolumeKg: 0,
     });
     setActiveSeconds(0);
   };
@@ -68,7 +46,7 @@ export function WorkoutProvider({ children }: { children: ReactNode }) {
     });
   };
 
-  const completeSet = (exerciseId: string, setIndex: number, accuracyScore = 95) => {
+  const completeSet = (exerciseId: string, setIndex: number, accuracyScore?: number) => {
     if (!activeSession) return;
     setActiveSession(prev => {
       if (!prev) return null;
@@ -81,7 +59,7 @@ export function WorkoutProvider({ children }: { children: ReactNode }) {
               updatedSets[setIndex] = {
                 ...updatedSets[setIndex],
                 completed: true,
-                accuracyScore,
+                ...(accuracyScore === undefined ? {} : { accuracyScore }),
               };
             }
             return { ...item, sets: updatedSets };

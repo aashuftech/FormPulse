@@ -47,7 +47,7 @@ export function Navbar({ onMobileMenuToggle }: { onMobileMenuToggle?: () => void
 
         <div className="flex items-center gap-2.5">
           <span className="h-2 w-2 rounded-full bg-brand-cyan" />
-          <span className="font-display text-base font-semibold text-brand-white">
+          <span className="font-display text-base font-bold leading-tight tracking-normal text-brand-white">
             {getPageTitle(location.pathname)}
           </span>
         </div>
@@ -80,7 +80,9 @@ export function Navbar({ onMobileMenuToggle }: { onMobileMenuToggle?: () => void
           {isNotificationsOpen && (
             <div className="absolute right-0 z-50 mt-2 w-72 rounded-xl border border-brand-teal/30 bg-brand-dark p-4 text-xs shadow-card">
               <div className="flex items-center justify-between border-b border-brand-teal/20 pb-2.5">
-                <span className="font-display text-sm font-semibold text-white">Notifications</span>
+                <span className="font-display text-sm font-bold leading-tight tracking-normal text-white">
+                  Notifications
+                </span>
                 <button
                   type="button"
                   onClick={() => setIsNotificationsOpen(false)}

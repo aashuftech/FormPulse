@@ -46,7 +46,7 @@ export function SettingsPage() {
           <div className="flex items-center justify-between border-b border-brand-teal/20 pb-3">
             <div className="flex items-center gap-2.5">
               <SlidersHorizontal className="h-5 w-5 text-brand-cyan" />
-              <h3 className="font-display text-lg font-semibold text-white">
+              <h3 className="font-display text-lg font-bold leading-tight tracking-normal text-white">
                 Form Feedback Strictness
               </h3>
             </div>
@@ -69,7 +69,7 @@ export function SettingsPage() {
                     : 'border-brand-teal/20 bg-brand-black/60 hover:border-brand-teal/40'
                 }`}
               >
-                <div className="font-display text-sm font-bold text-white">{sens}</div>
+                <div className="font-sans text-sm font-bold text-white">{sens}</div>
                 <div className="mt-1 text-xs text-gray-400">
                   {sens === 'Strict'
                     ? 'Flags minor form variations for experienced lifters'
@@ -86,7 +86,7 @@ export function SettingsPage() {
         <Card className="space-y-4 border border-brand-teal/30 bg-brand-dark/30 p-6">
           <div className="flex items-center gap-2.5 border-b border-brand-teal/20 pb-3">
             <Volume2 className="h-5 w-5 text-brand-cyan" />
-            <h3 className="font-display text-lg font-semibold text-white">
+            <h3 className="font-display text-lg font-bold leading-tight tracking-normal text-white">
               Audio & Vibration Cues
             </h3>
           </div>
@@ -146,7 +146,9 @@ export function SettingsPage() {
         <Card className="space-y-4 border border-brand-teal/30 bg-brand-dark/30 p-6">
           <div className="flex items-center gap-2.5 border-b border-brand-teal/20 pb-3">
             <Bell className="h-5 w-5 text-brand-cyan" />
-            <h3 className="font-display text-lg font-semibold text-white">Units & Notifications</h3>
+            <h3 className="font-display text-lg font-bold leading-tight tracking-normal text-white">
+              Units & Notifications
+            </h3>
           </div>
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">

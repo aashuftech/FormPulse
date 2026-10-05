@@ -117,7 +117,9 @@ export function ExercisesPage() {
 
                 {/* Name and Equipment */}
                 <div className="mt-3">
-                  <h3 className="font-display text-lg font-bold text-white">{exercise.name}</h3>
+                  <h3 className="font-display text-lg font-bold leading-tight tracking-normal text-white">
+                    {exercise.name}
+                  </h3>
                   <p className="mt-1 text-xs text-gray-400">Equipment: {exercise.equipment}</p>
                 </div>
 
@@ -148,7 +150,7 @@ export function ExercisesPage() {
                   <div className="mt-4 space-y-4 border-t border-brand-teal/20 pt-4 text-xs">
                     {/* How to Perform */}
                     <div>
-                      <h4 className="mb-2 flex items-center gap-1.5 font-semibold text-white">
+                      <h4 className="mb-2 flex items-center gap-1.5 font-display font-bold leading-tight tracking-normal text-white">
                         <CheckCircle2 className="h-4 w-4 text-brand-cyan" />
                         How to Perform It:
                       </h4>
@@ -161,7 +163,9 @@ export function ExercisesPage() {
 
                     {/* Form Tips */}
                     <div>
-                      <h4 className="mb-1.5 font-semibold text-brand-cyan">Key Form Tips:</h4>
+                      <h4 className="mb-1.5 font-display font-bold leading-tight tracking-normal text-brand-cyan">
+                        Key Form Tips:
+                      </h4>
                       <ul className="space-y-1 text-gray-300">
                         {exercise.formTips.map((tip, idx) => (
                           <li key={idx} className="flex items-start gap-1.5">
@@ -174,7 +178,7 @@ export function ExercisesPage() {
 
                     {/* Common Mistakes */}
                     <div className="rounded-lg border border-red-900/30 bg-red-950/30 p-3">
-                      <h4 className="mb-1 flex items-center gap-1.5 font-semibold text-red-300">
+                      <h4 className="mb-1 flex items-center gap-1.5 font-display font-bold leading-tight tracking-normal text-red-300">
                         <AlertCircle className="h-3.5 w-3.5" />
                         Common Mistakes to Avoid:
                       </h4>

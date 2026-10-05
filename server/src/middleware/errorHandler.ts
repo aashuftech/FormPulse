@@ -6,7 +6,8 @@ import { ApiError } from '../utils/ApiError.js';
 export const errorHandler: ErrorRequestHandler = (error, _request, response, _next) => {
   let statusCode = error instanceof ApiError ? error.statusCode : response.statusCode;
   if (statusCode < 400) statusCode = 500;
-  let message = error instanceof ApiError ? error.message : 'Internal server error';
+  let message =
+    error instanceof ApiError && error.statusCode < 500 ? error.message : 'Internal server error';
 
   if (error instanceof mongoose.Error.ValidationError) {
     statusCode = 400;
@@ -28,6 +29,7 @@ export const errorHandler: ErrorRequestHandler = (error, _request, response, _ne
       statusCode = errorStatus;
       if (errorStatus === 400) message = 'Invalid request body';
       if (errorStatus === 413) message = 'Request body too large';
+      if (errorStatus === 415) message = 'Unsupported request content type';
     }
   }
 

@@ -4,17 +4,11 @@ import { PageHeading } from '@/components/primitives/Typography';
 import { Card } from '@/components/primitives/Card';
 import { MetricCard } from '@/components/primitives/MetricCard';
 import { Badge } from '@/components/primitives/Badge';
-import { MOCK_METRIC_POINTS } from '@/services/mockData';
 import { formatDate } from '@/utils/formatters';
 
 export function ProgressPage() {
-  const muscleDistribution = [
-    { name: 'Legs (Squats & Deadlifts)', percent: 35 },
-    { name: 'Chest & Push Movements', percent: 25 },
-    { name: 'Back & Pull-Ups', percent: 20 },
-    { name: 'Shoulders & Arms', percent: 12 },
-    { name: 'Core & Abdominals', percent: 8 },
-  ];
+  const muscleDistribution: { name: string; percent: number }[] = [];
+  const metricPoints: { date: string; volumeKg?: number; avgFormScore?: number }[] = [];
 
   return (
     <PageContainer>
@@ -28,45 +22,45 @@ export function ProgressPage() {
         {/* Form Improvement */}
         <MetricCard
           label="Average Form Score"
-          value="94"
+          value="—"
           unit="%"
-          change="+6% this month"
-          changeType="positive"
+          change="No scores yet"
+          changeType="neutral"
           icon={<Activity className="h-4 w-4" />}
-          subtitle="Consistently clean reps"
+          subtitle="Complete a workout to begin tracking"
         />
 
         {/* Workout Frequency */}
         <MetricCard
           label="Workout Frequency"
-          value="4"
+          value="0"
           unit="days/wk"
-          change="100% of goal"
-          changeType="positive"
+          change="No workouts yet"
+          changeType="neutral"
           icon={<Calendar className="h-4 w-4" />}
-          subtitle="4 workouts completed this week"
+          subtitle="This week"
         />
 
         {/* Total Reps */}
         <MetricCard
           label="Completed Reps (This Week)"
-          value="220"
+          value="0"
           unit="Reps"
-          change="+15 reps vs last week"
-          changeType="positive"
+          change="No workouts yet"
+          changeType="neutral"
           icon={<CheckCircle2 className="h-4 w-4" />}
-          subtitle="100% verified full range"
+          subtitle="This week"
         />
 
         {/* Calories Burned */}
         <MetricCard
           label="Estimated Calories"
-          value="1,920"
+          value="0"
           unit="kcal"
-          change="On track"
+          change="No workouts yet"
           changeType="neutral"
           icon={<Flame className="h-4 w-4" />}
-          subtitle="Across 4 workouts"
+          subtitle="This week"
         />
       </div>
 
@@ -76,7 +70,7 @@ export function ProgressPage() {
         <Card className="space-y-4 border border-brand-teal/30 bg-brand-dark/30 p-6 lg:col-span-7">
           <div className="flex items-center justify-between border-b border-brand-teal/20 pb-3">
             <div>
-              <h3 className="font-display text-lg font-semibold text-white">
+              <h3 className="font-display text-lg font-bold leading-tight tracking-normal text-white">
                 Weekly Total Weight Lifted (kg)
               </h3>
               <p className="mt-0.5 text-xs text-gray-400">
@@ -88,7 +82,12 @@ export function ProgressPage() {
 
           {/* Clean Visual Progress Bars */}
           <div className="space-y-4 pt-3">
-            {MOCK_METRIC_POINTS.map(point => {
+            {metricPoints.length === 0 && (
+              <p className="py-8 text-center text-sm text-gray-400">
+                Your workout progress will appear here after you complete a session.
+              </p>
+            )}
+            {metricPoints.map(point => {
               const maxVol = 32000;
               const barWidth = point.volumeKg ? Math.round((point.volumeKg / maxVol) * 100) : 50;
 
@@ -116,15 +115,20 @@ export function ProgressPage() {
         <Card className="space-y-4 border border-brand-teal/30 bg-brand-dark/30 p-6 lg:col-span-5">
           <div className="flex items-center justify-between border-b border-brand-teal/20 pb-3">
             <div>
-              <h3 className="font-display text-lg font-semibold text-white">
+              <h3 className="font-display text-lg font-bold leading-tight tracking-normal text-white">
                 Workout Distribution
               </h3>
               <p className="mt-0.5 text-xs text-gray-400">Balance across major muscle groups</p>
             </div>
-            <Badge variant="teal">Balanced</Badge>
+            {muscleDistribution.length > 0 && <Badge variant="teal">Personal History</Badge>}
           </div>
 
           <div className="space-y-3.5 pt-2">
+            {muscleDistribution.length === 0 && (
+              <p className="py-8 text-center text-sm text-gray-400">
+                Complete exercises to see your personal workout distribution.
+              </p>
+            )}
             {muscleDistribution.map(item => (
               <div key={item.name} className="space-y-1">
                 <div className="flex justify-between text-xs">
@@ -142,9 +146,10 @@ export function ProgressPage() {
           </div>
 
           <div className="mt-4 space-y-1 rounded-xl border border-brand-teal/20 bg-brand-dark/60 p-3.5 text-xs text-gray-300">
-            <span className="block font-semibold text-white">FormPulse Coaching Tip:</span>
-            Your upper and lower body workout volume is well-balanced. Keep up the consistent squat
-            form!
+            <span className="block font-display font-bold leading-tight tracking-normal text-white">
+              Training Summary
+            </span>
+            Your training summary will appear as you complete workouts.
           </div>
         </Card>
       </div>

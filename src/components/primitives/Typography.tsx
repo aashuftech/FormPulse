@@ -20,7 +20,9 @@ export function PageHeading({
       )}
     >
       <div>
-        <h1 className="font-display text-2xl font-bold text-brand-white sm:text-3xl">{title}</h1>
+        <h1 className="font-display text-2xl font-bold leading-tight tracking-normal text-brand-white sm:text-3xl">
+          {title}
+        </h1>
         {subtitle && <p className="mt-1 font-sans text-sm text-gray-400">{subtitle}</p>}
       </div>
       {children && <div className="flex shrink-0 items-center gap-3">{children}</div>}
@@ -36,7 +38,7 @@ export function SectionTitle({
   return (
     <h2
       className={cn(
-        'flex items-center gap-2.5 font-display text-lg font-semibold text-brand-white',
+        'flex items-center gap-2.5 font-display text-lg font-bold leading-tight tracking-normal text-brand-white',
         className,
       )}
       {...props}
@@ -67,10 +69,7 @@ export function MetricValue({
 
   return (
     <div
-      className={cn(
-        'flex items-baseline gap-1.5 font-display font-bold text-brand-white',
-        className,
-      )}
+      className={cn('flex items-baseline gap-1.5 font-sans font-bold text-brand-white', className)}
     >
       <span className={sizeClasses[size]}>{value}</span>
       {unit && <span className="font-sans text-sm font-medium text-gray-400">{unit}</span>}

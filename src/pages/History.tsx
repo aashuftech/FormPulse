@@ -4,14 +4,12 @@ import { PageContainer } from '@/components/primitives/PageContainer';
 import { PageHeading, SectionTitle } from '@/components/primitives/Typography';
 import { Card } from '@/components/primitives/Card';
 import { Badge } from '@/components/primitives/Badge';
-import { MOCK_WORKOUT_HISTORY } from '@/services/mockData';
 import { formatDate, formatNumber } from '@/utils/formatters';
 import type { WorkoutSession } from '@/types';
 
 export function HistoryPage() {
-  const [selectedSession, setSelectedSession] = useState<WorkoutSession | null>(
-    MOCK_WORKOUT_HISTORY[0] || null,
-  );
+  const [selectedSession, setSelectedSession] = useState<WorkoutSession | null>(null);
+  const workoutHistory: WorkoutSession[] = [];
 
   return (
     <PageContainer>
@@ -24,19 +22,19 @@ export function HistoryPage() {
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
         <div className="rounded-xl border border-brand-teal/25 bg-brand-dark/30 p-4">
           <span className="block text-xs font-medium text-gray-400">Total Workouts</span>
-          <div className="mt-1 font-display text-2xl font-bold text-white">48 Sessions</div>
+          <div className="mt-1 font-sans text-2xl font-bold text-white">0 Sessions</div>
         </div>
         <div className="rounded-xl border border-brand-teal/25 bg-brand-dark/30 p-4">
           <span className="block text-xs font-medium text-gray-400">Total Weight Lifted</span>
-          <div className="mt-1 font-display text-2xl font-bold text-brand-cyan">342,500 kg</div>
+          <div className="mt-1 font-sans text-2xl font-bold text-brand-cyan">0 kg</div>
         </div>
         <div className="rounded-xl border border-brand-teal/25 bg-brand-dark/30 p-4">
           <span className="block text-xs font-medium text-gray-400">Average Form Score</span>
-          <div className="mt-1 font-display text-2xl font-bold text-emerald-400">94% Quality</div>
+          <div className="mt-1 font-sans text-2xl font-bold text-emerald-400">—</div>
         </div>
         <div className="rounded-xl border border-brand-teal/25 bg-brand-dark/30 p-4">
           <span className="block text-xs font-medium text-gray-400">Active Habit</span>
-          <div className="mt-1 font-display text-2xl font-bold text-white">12 Weeks</div>
+          <div className="mt-1 font-sans text-2xl font-bold text-white">0 Weeks</div>
         </div>
       </div>
 
@@ -45,7 +43,12 @@ export function HistoryPage() {
         <div className="space-y-3 lg:col-span-6">
           <SectionTitle>Completed Workouts</SectionTitle>
 
-          {MOCK_WORKOUT_HISTORY.map(session => {
+          {workoutHistory.length === 0 && (
+            <Card className="p-5 text-sm text-gray-400">
+              Your completed workouts will appear here.
+            </Card>
+          )}
+          {workoutHistory.map(session => {
             const isSelected = selectedSession?.id === session.id;
 
             // Total reps in this session
@@ -70,7 +73,9 @@ export function HistoryPage() {
                       <Calendar className="h-3.5 w-3.5 text-brand-cyan" />
                       {formatDate(session.startTime)}
                     </span>
-                    <h3 className="font-display text-lg font-bold text-white">{session.title}</h3>
+                    <h3 className="font-display text-lg font-bold leading-tight tracking-normal text-white">
+                      {session.title}
+                    </h3>
                   </div>
                   <Badge variant="cyan">{session.averageFormScore}% Form Score</Badge>
                 </div>
@@ -109,7 +114,7 @@ export function HistoryPage() {
                     {formatDate(selectedSession.startTime)}
                   </span>
                 </div>
-                <h3 className="mt-2 font-display text-2xl font-bold text-white">
+                <h3 className="mt-2 font-display text-2xl font-bold leading-tight tracking-normal text-white">
                   {selectedSession.title}
                 </h3>
                 <p className="mt-1 text-sm text-gray-300">{selectedSession.description}</p>
@@ -138,7 +143,7 @@ export function HistoryPage() {
 
               {/* Exercises & Sets Performed */}
               <div className="space-y-4">
-                <h4 className="font-display text-sm font-semibold text-white">
+                <h4 className="font-display text-sm font-bold leading-tight tracking-normal text-white">
                   Exercises Completed
                 </h4>
 
@@ -148,7 +153,7 @@ export function HistoryPage() {
                     className="space-y-2 rounded-xl border border-brand-teal/20 bg-brand-black/60 p-4"
                   >
                     <div className="flex items-center justify-between">
-                      <span className="font-display text-sm font-bold text-white">
+                      <span className="font-sans text-sm font-bold text-white">
                         {item.exercise.name}
                       </span>
                       <span className="text-xs text-gray-400">

@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ROUTES } from '@/lib/constants';
+import { useAuth } from '@/hooks/useAuth';
 
 interface NavItem {
   name: string;
@@ -32,6 +33,15 @@ const navItems: NavItem[] = [
 ];
 
 export function Sidebar({ className }: { className?: string }) {
+  const { user } = useAuth();
+  const weeklyProgress = user?.weeklyProgressScore ?? 0;
+  const userInitials = (user?.name ?? 'User')
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map(part => part[0]?.toUpperCase() ?? '')
+    .join('');
+
   return (
     <aside
       className={cn(
@@ -57,12 +67,15 @@ export function Sidebar({ className }: { className?: string }) {
       <div className="mx-3 my-4 rounded-xl border border-brand-teal/25 bg-brand-dark/30 p-4">
         <div className="flex items-center justify-between">
           <span className="font-sans text-xs font-medium text-gray-300">Today's Progress</span>
-          <span className="font-display text-sm font-bold text-brand-cyan">92%</span>
+          <span className="font-sans text-sm font-bold text-brand-cyan">{weeklyProgress}%</span>
         </div>
         <div className="mt-2.5 h-2 w-full overflow-hidden rounded-full border border-brand-teal/20 bg-brand-black">
-          <div className="h-full w-[92%] rounded-full bg-brand-cyan" />
+          <div
+            className="h-full rounded-full bg-brand-cyan"
+            style={{ width: `${weeklyProgress}%` }}
+          />
         </div>
-        <p className="mt-2 text-[11px] text-gray-400">3 of 4 weekly targets completed</p>
+        <p className="mt-2 text-[11px] text-gray-400">Your weekly progress</p>
       </div>
 
       {/* Navigation Links */}
@@ -102,16 +115,16 @@ export function Sidebar({ className }: { className?: string }) {
       <div className="flex items-center justify-between border-t border-brand-teal/20 bg-brand-dark/10 p-4">
         <div className="flex items-center gap-3">
           <div className="flex h-8 w-8 items-center justify-center rounded-full border border-brand-teal/50 bg-brand-dark text-xs font-bold text-brand-cyan">
-            MV
+            {userInitials}
           </div>
           <div>
-            <p className="text-sm font-medium leading-tight text-brand-white">Marcus Vance</p>
-            <p className="font-sans text-xs text-gray-400">Active Member</p>
+            <p className="text-sm font-medium leading-tight text-brand-white">{user?.name}</p>
+            <p className="font-sans text-xs text-gray-400">{user?.email}</p>
           </div>
         </div>
         <div className="flex items-center gap-1.5 text-amber-400">
           <Flame className="h-4 w-4" />
-          <span className="text-xs font-semibold">14d</span>
+          <span className="text-xs font-semibold">{user?.streakDays ?? 0}d</span>
         </div>
       </div>
     </aside>

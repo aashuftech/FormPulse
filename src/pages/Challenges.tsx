@@ -51,7 +51,7 @@ export function ChallengesPage() {
             <Trophy className="h-6 w-6" />
           </div>
           <div>
-            <div className="font-display text-xl font-bold text-white">3 Active</div>
+            <div className="font-sans text-xl font-bold text-white">3 Active</div>
             <div className="text-xs text-gray-400">Joined Challenges</div>
           </div>
         </div>
@@ -61,7 +61,7 @@ export function ChallengesPage() {
             <Award className="h-6 w-6" />
           </div>
           <div>
-            <div className="font-display text-xl font-bold text-brand-cyan">8 Earned</div>
+            <div className="font-sans text-xl font-bold text-brand-cyan">8 Earned</div>
             <div className="text-xs text-gray-400">Achievement Badges</div>
           </div>
         </div>
@@ -71,7 +71,7 @@ export function ChallengesPage() {
             <Users className="h-6 w-6" />
           </div>
           <div>
-            <div className="font-display text-xl font-bold text-white">2,500+ Members</div>
+            <div className="font-sans text-xl font-bold text-white">2,500+ Members</div>
             <div className="text-xs text-gray-400">Active Community Lifters</div>
           </div>
         </div>
@@ -103,7 +103,9 @@ export function ChallengesPage() {
 
                   {/* Challenge Name & Goal */}
                   <div className="mt-3">
-                    <h3 className="font-display text-lg font-bold text-white">{challenge.title}</h3>
+                    <h3 className="font-display text-lg font-bold leading-tight tracking-normal text-white">
+                      {challenge.title}
+                    </h3>
                     <p className="mt-1.5 text-xs font-medium text-brand-cyan">
                       Goal: {challenge.goal}
                     </p>
@@ -168,7 +170,9 @@ export function ChallengesPage() {
       {showCreateModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm">
           <div className="w-full max-w-md space-y-4 rounded-2xl border border-brand-teal/40 bg-brand-dark p-6 shadow-card">
-            <h3 className="font-display text-xl font-bold text-white">Create a Custom Challenge</h3>
+            <h3 className="font-display text-xl font-bold leading-tight tracking-normal text-white">
+              Create a Custom Challenge
+            </h3>
             <p className="text-xs text-gray-300">
               Set a personal workout frequency, volume, or form goal to challenge yourself this
               month.

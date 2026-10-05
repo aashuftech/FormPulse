@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Award, Flame, Dumbbell, Edit3, CheckCircle2 } from 'lucide-react';
+import { Edit3 } from 'lucide-react';
 import { PageContainer } from '@/components/primitives/PageContainer';
 import { PageHeading, SectionTitle } from '@/components/primitives/Typography';
 import { Card } from '@/components/primitives/Card';
@@ -28,39 +28,13 @@ export function ProfilePage() {
     setIsEditing(false);
   };
 
-  const personalRecords = [
-    {
-      movement: 'Barbell Back Squat',
-      record: '140 kg',
-      setsReps: '3 sets of 6 reps',
-      formScore: '96%',
-    },
-    {
-      movement: 'Romanian Deadlift',
-      record: '150 kg',
-      setsReps: '3 sets of 8 reps',
-      formScore: '94%',
-    },
-    {
-      movement: 'Incline Dumbbell Bench Press',
-      record: '36 kg each',
-      setsReps: '3 sets of 8 reps',
-      formScore: '95%',
-    },
-    {
-      movement: 'Overhead Shoulder Press',
-      record: '70 kg',
-      setsReps: '3 sets of 6 reps',
-      formScore: '92%',
-    },
-  ];
-
-  const earnedBadges = [
-    { title: '14-Day Streak', desc: 'Trained consistently for two weeks', icon: Flame },
-    { title: 'Form Master', desc: 'Achieved 95%+ form score on 50 sets', icon: Award },
-    { title: 'Century Club', desc: 'Completed over 100 verified sets', icon: Dumbbell },
-    { title: 'Consistency Pro', desc: 'Never missed a weekly workout goal', icon: CheckCircle2 },
-  ];
+  const personalRecords: {
+    movement: string;
+    record: string;
+    setsReps: string;
+    formScore: string;
+  }[] = [];
+  const earnedBadges: { title: string; desc: string }[] = [];
 
   return (
     <PageContainer>
@@ -82,11 +56,18 @@ export function ProfilePage() {
         {/* Profile Card / Body & Fitness Details */}
         <Card className="space-y-6 border border-brand-teal/30 bg-brand-dark/30 p-6 lg:col-span-5">
           <div className="flex items-center gap-4">
-            <div className="flex h-16 w-16 items-center justify-center rounded-2xl border-2 border-brand-cyan bg-brand-dark font-display text-xl font-bold text-brand-cyan shadow-sm">
-              MV
+            <div className="flex h-16 w-16 items-center justify-center rounded-2xl border-2 border-brand-cyan bg-brand-dark font-sans text-xl font-bold text-brand-cyan shadow-sm">
+              {(user?.name ?? 'User')
+                .trim()
+                .split(/\s+/)
+                .slice(0, 2)
+                .map(part => part[0]?.toUpperCase() ?? '')
+                .join('')}
             </div>
             <div>
-              <h2 className="font-display text-xl font-bold text-white">{user?.name}</h2>
+              <h2 className="font-display text-xl font-bold leading-tight tracking-normal text-white">
+                {user?.name}
+              </h2>
               <p className="font-sans text-xs text-gray-400">{user?.email}</p>
               <div className="mt-2 flex items-center gap-2">
                 <Badge variant="cyan">{user?.athleteLevel}</Badge>
@@ -99,19 +80,19 @@ export function ProfilePage() {
           <div className="grid grid-cols-3 gap-2 border-t border-brand-teal/20 pt-4 text-center">
             <div className="rounded-xl border border-brand-teal/15 bg-brand-black/60 p-3">
               <span className="block text-xs font-medium text-gray-400">Streak</span>
-              <span className="mt-0.5 block font-display text-base font-bold text-white">
+              <span className="mt-0.5 block font-sans text-base font-bold text-white">
                 {user?.streakDays} Days
               </span>
             </div>
             <div className="rounded-xl border border-brand-teal/15 bg-brand-black/60 p-3">
               <span className="block text-xs font-medium text-gray-400">Weight</span>
-              <span className="mt-0.5 block font-display text-base font-bold text-brand-cyan">
+              <span className="mt-0.5 block font-sans text-base font-bold text-brand-cyan">
                 {user?.weightKg} kg
               </span>
             </div>
             <div className="rounded-xl border border-brand-teal/15 bg-brand-black/60 p-3">
               <span className="block text-xs font-medium text-gray-400">Height</span>
-              <span className="mt-0.5 block font-display text-base font-bold text-white">
+              <span className="mt-0.5 block font-sans text-base font-bold text-white">
                 {user?.heightCm} cm
               </span>
             </div>
@@ -160,19 +141,20 @@ export function ProfilePage() {
 
           {/* Earned Badges Showcase */}
           <div className="space-y-3 border-t border-brand-teal/20 pt-4">
-            <h4 className="font-display text-sm font-semibold text-white">
+            <h4 className="font-display text-sm font-bold leading-tight tracking-normal text-white">
               Earned Achievement Badges
             </h4>
             <div className="grid grid-cols-2 gap-2.5">
+              {earnedBadges.length === 0 && (
+                <p className="col-span-2 text-xs text-gray-400">No achievement badges yet.</p>
+              )}
               {earnedBadges.map((badge, idx) => {
-                const Icon = badge.icon;
                 return (
                   <div
                     key={idx}
                     className="space-y-1 rounded-xl border border-brand-teal/20 bg-brand-dark/50 p-3"
                   >
                     <div className="flex items-center gap-1.5 text-brand-cyan">
-                      <Icon className="h-4 w-4" />
                       <span className="text-xs font-semibold text-white">{badge.title}</span>
                     </div>
                     <p className="text-[11px] leading-tight text-gray-400">{badge.desc}</p>
@@ -188,18 +170,23 @@ export function ProfilePage() {
           <SectionTitle>Personal Records</SectionTitle>
 
           <div className="space-y-3">
+            {personalRecords.length === 0 && (
+              <Card className="border-brand-teal/20 bg-brand-dark/25 p-5 text-sm text-gray-400">
+                Your personal records will appear after you complete workouts.
+              </Card>
+            )}
             {personalRecords.map((pr, idx) => (
               <Card key={idx} className="border-brand-teal/20 bg-brand-dark/25 p-5">
                 <div className="flex items-center justify-between">
                   <div className="space-y-1">
-                    <h4 className="font-display text-base font-bold text-white">{pr.movement}</h4>
+                    <h4 className="font-display text-base font-bold leading-tight tracking-normal text-white">
+                      {pr.movement}
+                    </h4>
                     <p className="text-xs text-gray-400">Best: {pr.setsReps}</p>
                   </div>
 
                   <div className="text-right">
-                    <div className="font-display text-xl font-bold text-brand-cyan">
-                      {pr.record}
-                    </div>
+                    <div className="font-sans text-xl font-bold text-brand-cyan">{pr.record}</div>
                     <Badge variant="cyan" size="sm">
                       {pr.formScore} Form Quality
                     </Badge>

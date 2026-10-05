@@ -21,6 +21,20 @@ export const env = {
   cookieSameSite: getRequiredEnv('COOKIE_SAME_SITE', 'lax'),
 };
 
+let configuredClientOrigin: URL;
+try {
+  configuredClientOrigin = new URL(env.clientUrl);
+} catch {
+  throw new Error('CLIENT_URL must be a valid frontend origin');
+}
+
+if (
+  !['http:', 'https:'].includes(configuredClientOrigin.protocol) ||
+  configuredClientOrigin.origin !== env.clientUrl
+) {
+  throw new Error('CLIENT_URL must be an exact HTTP or HTTPS origin');
+}
+
 if (!Number.isInteger(env.port) || env.port < 1 || env.port > 65535) {
   throw new Error('PORT must be an integer between 1 and 65535');
 }

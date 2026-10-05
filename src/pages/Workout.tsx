@@ -44,7 +44,7 @@ export function WorkoutPage() {
   }, [isSessionActive, isTimerRunning]);
 
   const handleStart = () => {
-    startSession('Leg Day & Core Strength');
+    startSession();
     setIsTimerRunning(true);
     setElapsedSeconds(0);
   };
@@ -115,7 +115,9 @@ export function WorkoutPage() {
             <Dumbbell className="h-8 w-8" />
           </div>
           <div className="mx-auto max-w-md space-y-2">
-            <h3 className="font-display text-2xl font-bold text-white">Ready to Start Training?</h3>
+            <h3 className="font-display text-2xl font-bold leading-tight tracking-normal text-white">
+              Ready to Start Training?
+            </h3>
             <p className="text-sm text-gray-300">
               Turn on your camera to receive live form feedback, automatic rep counts, and workout
               stats.
@@ -128,7 +130,7 @@ export function WorkoutPage() {
               onClick={handleStart}
               leftIcon={<Play className="h-4 w-4 fill-current" />}
             >
-              Start Leg Day & Core
+              Start Workout
             </Button>
           </div>
         </Card>
@@ -140,7 +142,7 @@ export function WorkoutPage() {
             {/* Workout Duration */}
             <Card className="border-brand-teal/20 bg-brand-dark/40 p-4">
               <span className="block text-xs font-medium text-gray-400">Workout Duration</span>
-              <div className="mt-1 flex items-center gap-2 font-display text-2xl font-bold text-white">
+              <div className="mt-1 flex items-center gap-2 font-sans text-2xl font-bold text-white">
                 <Clock className="h-5 w-5 text-brand-cyan" />
                 {formatDuration(elapsedSeconds)}
               </div>
@@ -149,7 +151,7 @@ export function WorkoutPage() {
             {/* Reps Completed */}
             <Card className="border-brand-teal/20 bg-brand-dark/40 p-4">
               <span className="block text-xs font-medium text-gray-400">Completed Reps</span>
-              <div className="mt-1 flex items-center gap-2 font-display text-2xl font-bold text-white">
+              <div className="mt-1 flex items-center gap-2 font-sans text-2xl font-bold text-white">
                 <Check className="h-5 w-5 text-emerald-400" />
                 {totalRepsCompleted} Reps
               </div>
@@ -158,16 +160,15 @@ export function WorkoutPage() {
             {/* Form Score */}
             <Card className="border-brand-teal/20 bg-brand-dark/40 p-4">
               <span className="block text-xs font-medium text-gray-400">Live Form Score</span>
-              <div className="mt-1 flex items-center gap-2 font-display text-2xl font-bold text-brand-cyan">
-                <Activity className="h-5 w-5 text-brand-cyan" />
-                96%
+              <div className="mt-1 flex items-center gap-2 font-sans text-2xl font-bold text-brand-cyan">
+                <Activity className="h-5 w-5 text-brand-cyan" />—
               </div>
             </Card>
 
             {/* Estimated Calories */}
             <Card className="border-brand-teal/20 bg-brand-dark/40 p-4">
               <span className="block text-xs font-medium text-gray-400">Estimated Calories</span>
-              <div className="mt-1 flex items-center gap-2 font-display text-2xl font-bold text-amber-400">
+              <div className="mt-1 flex items-center gap-2 font-sans text-2xl font-bold text-amber-400">
                 <Flame className="h-5 w-5 text-amber-400" />
                 {estimatedCalories} kcal
               </div>
@@ -182,11 +183,11 @@ export function WorkoutPage() {
                 <div className="flex items-center justify-between border-b border-brand-teal/20 pb-3">
                   <div className="flex items-center gap-2">
                     <Camera className="h-4 w-4 text-brand-cyan" />
-                    <span className="font-display text-sm font-semibold text-white">
-                      Camera Guidance & AI Analysis
+                    <span className="font-display text-sm font-bold leading-tight tracking-normal text-white">
+                      Workout Guidance
                     </span>
                   </div>
-                  <Badge variant="cyan">Camera Active</Badge>
+                  <Badge variant="cyan">{currentExerciseItem ? 'Ready' : 'No Exercise'}</Badge>
                 </div>
 
                 {/* Camera Viewport Placeholder */}
@@ -196,18 +197,20 @@ export function WorkoutPage() {
                       <Activity className="h-8 w-8 animate-pulse" />
                     </div>
                     <div>
-                      <h4 className="font-display text-lg font-bold text-white">
-                        {currentExerciseItem?.exercise.name}
+                      <h4 className="font-display text-lg font-bold leading-tight tracking-normal text-white">
+                        {currentExerciseItem?.exercise.name ?? 'No exercise selected'}
                       </h4>
                       <p className="mt-1 text-xs font-medium text-emerald-400">
-                        Form Status: Excellent — Knees properly aligned
+                        {currentExerciseItem
+                          ? 'Form guidance will appear here.'
+                          : 'Start with an exercise to track your workout.'}
                       </p>
                     </div>
                   </div>
 
                   <div className="absolute bottom-3 left-4 right-4 flex justify-between rounded-lg border border-brand-teal/20 bg-brand-dark/80 px-3 py-2 text-xs text-gray-300 backdrop-blur-md">
-                    <span>Exercise: {currentExerciseItem?.exercise.name}</span>
-                    <span className="font-medium text-brand-cyan">Rep #3 Detected</span>
+                    <span>Exercise: {currentExerciseItem?.exercise.name ?? 'None selected'}</span>
+                    <span className="font-medium text-brand-cyan">Waiting to begin</span>
                   </div>
                 </div>
 
@@ -222,7 +225,7 @@ export function WorkoutPage() {
                         <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-brand-cyan" />
                         {tip}
                       </li>
-                    ))}
+                    )) ?? <li>Select an exercise to see form tips.</li>}
                   </ul>
                 </div>
               </Card>
@@ -246,14 +249,17 @@ export function WorkoutPage() {
                     {idx + 1}. {item.exercise.name}
                   </button>
                 ))}
+                {activeSession?.exercises.length === 0 && (
+                  <p className="py-2 text-xs text-gray-400">No exercises have been added yet.</p>
+                )}
               </div>
 
               {/* Sets Table */}
               <Card className="border border-brand-teal/30 bg-brand-dark/30 p-5">
                 <div className="flex items-center justify-between border-b border-brand-teal/20 pb-3">
                   <div>
-                    <h3 className="font-display text-base font-semibold text-white">
-                      {currentExerciseItem?.exercise.name} Sets
+                    <h3 className="font-display text-base font-bold leading-tight tracking-normal text-white">
+                      {currentExerciseItem?.exercise.name ?? 'Workout Sets'}
                     </h3>
                     <p className="mt-0.5 text-xs text-gray-400">
                       Target: {currentExerciseItem?.exercise.targetSetsDefault} sets of{' '}
@@ -289,7 +295,7 @@ export function WorkoutPage() {
                       <span className="col-span-2">
                         {set.completed ? (
                           <Badge variant="cyan" size="sm">
-                            {set.accuracyScore || 95}%
+                            {set.accuracyScore ?? '—'}
                           </Badge>
                         ) : (
                           <span className="text-xs text-gray-400">—</span>
@@ -304,7 +310,7 @@ export function WorkoutPage() {
                           <Button
                             size="sm"
                             variant="primary"
-                            onClick={() => completeSet(currentExerciseItem.exerciseId, idx, 96)}
+                            onClick={() => completeSet(currentExerciseItem.exerciseId, idx)}
                             className="h-7 px-2.5 text-xs"
                           >
                             Check
@@ -338,6 +344,7 @@ export function WorkoutPage() {
                       size="md"
                       variant="secondary"
                       className="w-full"
+                      disabled={!currentExerciseItem}
                       onClick={() => {
                         if (currentExerciseItem) {
                           addSet(currentExerciseItem.exerciseId, {

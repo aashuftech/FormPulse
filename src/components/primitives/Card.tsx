@@ -40,7 +40,10 @@ export const CardTitle = forwardRef<HTMLHeadingElement, HTMLAttributes<HTMLHeadi
   ({ className, ...props }, ref) => (
     <h3
       ref={ref}
-      className={cn('font-display text-lg font-semibold text-brand-white', className)}
+      className={cn(
+        'font-display text-lg font-bold leading-tight tracking-normal text-brand-white',
+        className,
+      )}
       {...props}
     />
   ),
