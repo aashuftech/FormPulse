@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-brand-white: #ffffff;
+    --color-brand-cyan: #367d8a;
+    --color-brand-teal: #285f6b;
+    --color-brand-dark: #133336;
+    --color-brand-black: #010001;
+  }
+
+  body {
+    background-color: #010001;
+    color: #ffffff;
+    font-family: "Inter", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Space Grotesk", sans-serif;
+    letter-spacing: -0.02em;
+  }
+
+  /* Refined, modern slim scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #010001;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #133336;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #285f6b;
+  }
+}
+
+@layer utilities {
+  .bg-subtle-grid {
+    background-size: 48px 48px;
+    background-image:
+      linear-gradient(to right, rgba(54, 125, 138, 0.04) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(54, 125, 138, 0.04) 1px, transparent 1px);
+  }
+}
