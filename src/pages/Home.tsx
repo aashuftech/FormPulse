@@ -21,7 +21,7 @@ import { ROUTES } from '@/lib/constants';
 
 function PosePreview() {
   return (
-    <div className="home-hero-visual bg-subtle-grid relative mx-auto w-full max-w-xl overflow-hidden rounded-3xl border border-brand-teal/40 bg-brand-black p-4 shadow-[0_30px_100px_rgba(19,51,54,0.45)] sm:p-6">
+    <div className="home-hero-visual bg-subtle-grid relative flex aspect-[0.91/1] w-full flex-col overflow-hidden rounded-3xl border border-brand-teal/40 bg-brand-black p-4 shadow-[0_30px_100px_rgba(19,51,54,0.45)] sm:p-6">
       <div className="absolute inset-0 bg-gradient-to-br from-brand-cyan/10 via-transparent to-transparent" />
       <div className="relative flex items-center justify-between gap-3 border-b border-brand-teal/30 pb-4">
         <div className="flex items-center gap-3">
@@ -36,11 +36,11 @@ function PosePreview() {
         <Badge variant="outline">On-device</Badge>
       </div>
 
-      <div className="relative mt-4 grid min-h-[300px] place-items-center overflow-hidden rounded-2xl border border-brand-teal/25 bg-brand-black/75 sm:min-h-[360px]">
+      <div className="relative mt-4 grid min-h-0 flex-1 place-items-center overflow-hidden rounded-2xl border border-brand-teal/25 bg-brand-black/75">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(54,125,138,0.14),transparent_65%)]" />
         <svg
           aria-label="Illustration of a pose landmark skeleton"
-          className="relative h-[270px] w-full max-w-[300px] drop-shadow-[0_0_18px_rgba(54,125,138,0.45)] sm:h-[320px]"
+          className="relative h-[78%] max-h-[320px] w-full max-w-[300px] drop-shadow-[0_0_18px_rgba(54,125,138,0.45)]"
           fill="none"
           role="img"
           viewBox="0 0 240 300"
@@ -133,7 +133,7 @@ export function HomePage() {
     >
       <section className="relative border-b border-brand-teal/20 px-4 pb-20 pt-14 sm:px-6 md:pb-28 md:pt-20 lg:px-8">
         <div className="pointer-events-none absolute left-1/4 top-1/4 h-[420px] w-[420px] rounded-full bg-brand-teal/10 blur-[120px]" />
-        <div className="relative mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-10">
+        <div className="relative mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-start lg:gap-10">
           <div className="space-y-7 text-center lg:text-left" data-reveal>
             <Badge variant="outline">
               <span className="mr-1.5 inline-flex h-1.5 w-1.5 rounded-full bg-brand-cyan" />
