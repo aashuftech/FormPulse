@@ -48,7 +48,7 @@ export function PublicLayout() {
             ) : (
               <>
                 <Link to={ROUTES.LOGIN}>
-                  <Button variant="ghost" size="sm">
+                  <Button variant="ghost" size="md">
                     Log In
                   </Button>
                 </Link>
