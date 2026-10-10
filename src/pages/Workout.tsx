@@ -705,7 +705,6 @@ export function WorkoutPage() {
                     key={item.exerciseId}
                     type="button"
                     onClick={() => setActiveExerciseIndex(idx)}
-                    disabled={nextExerciseIndex >= 0 && idx > nextExerciseIndex}
                     className={`whitespace-nowrap rounded-lg border px-3.5 py-2 font-sans text-xs transition-colors ${
                       activeExerciseIndex === idx
                         ? 'border-brand-cyan bg-brand-dark font-semibold text-white shadow-sm'
