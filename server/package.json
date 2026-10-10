@@ -9,6 +9,7 @@
     "start": "node dist/server.js",
     "lint": "eslint src --ext .ts",
     "test:authorization": "npm run build && node --test tests/authorization.integration.test.mjs",
+    "test:render-serving": "npm run build && node --test tests/render-serving.test.mjs",
     "test:indexes": "npm run build && node --test tests/database-indexes.integration.test.mjs",
     "test:pagination": "npm run build && node --test tests/session-pagination.test.mjs",
     "test:workouts": "npm run build && node --test tests/workouts.integration.test.mjs",

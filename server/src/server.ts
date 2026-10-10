@@ -29,7 +29,7 @@ async function shutdown(signal: NodeJS.Signals): Promise<void> {
 async function startServer(): Promise<void> {
   await connectToDatabase();
 
-  server = app.listen(env.port, () => {
+  server = app.listen(env.port, '0.0.0.0', () => {
     console.info(`FormPulse API listening on port ${env.port}`);
   });
 
