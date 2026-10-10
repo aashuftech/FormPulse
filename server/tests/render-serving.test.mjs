@@ -16,6 +16,7 @@ const html = await readFile(frontendIndex, 'utf8');
 const layers = app.router.stack;
 const staticLayerIndex = layers.findIndex(layer => layer.name === 'serveStatic');
 const apiLayerIndex = layers.findIndex(layer => layer.name === 'router');
+const corsLayer = layers.find(layer => layer.name === 'corsMiddleware');
 const notFoundLayerIndex = layers.findIndex(layer => layer.name === 'notFound');
 const spaFallback = layers[staticLayerIndex + 1]?.handle;
 
@@ -24,6 +25,13 @@ test('mounts API routes before static assets and SPA fallback', () => {
   assert.ok(staticLayerIndex > apiLayerIndex);
   assert.ok(notFoundLayerIndex > staticLayerIndex);
   assert.equal(typeof spaFallback, 'function');
+});
+
+test('applies credentialed CORS checks to API paths, not same-origin frontend assets', () => {
+  assert.ok(corsLayer);
+  const matchesCorsPath = corsLayer.matchers[0];
+  assert.ok(matchesCorsPath('/api/auth/me'));
+  assert.equal(matchesCorsPath('/assets/index.js'), false);
 });
 
 test('serves the built index for root and client-side route requests', () => {

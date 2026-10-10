@@ -30,6 +30,7 @@ app.use(
   }),
 );
 app.use(
+  '/api',
   cors({
     origin: (origin, callback) => {
       if (!origin || origin === env.clientUrl) {
