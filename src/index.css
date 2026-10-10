@@ -55,6 +55,15 @@
   }
 }
 
+.home-pose-grid {
+  background-color: #071114;
+  background-image:
+    linear-gradient(to right, rgba(49, 87, 92, 0.2) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(49, 87, 92, 0.2) 1px, transparent 1px);
+  background-position: 0 0;
+  background-size: 30px 30px;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   [data-reveal] {
     opacity: 0;

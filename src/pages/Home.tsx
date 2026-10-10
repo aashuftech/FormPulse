@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
 import {
-  Activity,
   ArrowRight,
   Camera,
   CheckCircle2,
@@ -9,7 +8,6 @@ import {
   Eye,
   LineChart,
   PlayCircle,
-  ShieldCheck,
   Sparkles,
   Target,
 } from 'lucide-react';
@@ -21,65 +19,53 @@ import { ROUTES } from '@/lib/constants';
 
 function PosePreview() {
   return (
-    <div className="home-hero-visual bg-subtle-grid relative flex aspect-[0.91/1] w-full flex-col overflow-hidden rounded-3xl border border-brand-teal/40 bg-brand-black p-4 shadow-[0_24px_72px_rgba(19,51,54,0.2)] sm:p-6">
-      <div className="relative flex items-center justify-between gap-3 border-b border-brand-teal/30 pb-4">
-        <div className="flex items-center gap-3">
-          <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-brand-cyan/30 bg-brand-dark/80 text-brand-cyan">
-            <Activity className="h-5 w-5" />
-          </span>
-          <div>
-            <p className="font-display text-sm font-semibold text-white">Pose analysis preview</p>
-            <p className="mt-0.5 text-xs text-gray-400">Illustrative pose overlay</p>
-          </div>
-        </div>
-        <Badge variant="outline">On-device</Badge>
+    <div className="home-hero-visual relative flex aspect-[0.91/1] w-full flex-col overflow-hidden rounded-[22px] border border-[#102d32] bg-[#050b0d] p-[14px] shadow-[0_18px_60px_rgba(0,0,0,0.18)]">
+      <div className="flex h-[14px] shrink-0 items-center justify-between text-[10px] leading-[14px] text-gray-500">
+        <span className="flex items-center gap-1.5">
+          <span className="h-1 w-1 rounded-full bg-gray-500" />
+          Live camera
+        </span>
+        <span>Squat</span>
       </div>
 
-      <div className="relative mt-4 grid min-h-0 flex-1 place-items-center overflow-hidden rounded-2xl border border-brand-teal/25 bg-brand-black/75">
+      <div className="home-pose-grid relative mt-[5px] min-h-0 flex-1 overflow-hidden rounded-[15px] border border-[#102d32]">
         <svg
-          aria-label="Illustration of a pose landmark skeleton"
-          className="relative h-[78%] max-h-[320px] w-full max-w-[300px]"
+          aria-label="Illustrative squat pose landmarks"
+          className="absolute inset-0 h-full w-full"
           fill="none"
+          preserveAspectRatio="xMidYMid meet"
           role="img"
-          viewBox="0 0 240 300"
+          viewBox="0 0 366 388"
         >
-          <g stroke="#4b9eaa" strokeLinecap="round" strokeLinejoin="round" strokeWidth="3.5">
-            {/* Side-view squat landmarks: head, shoulders, arms, torso, hips and both legs. */}
-            <path d="M130 50 130 66 113 145" />
-            <path d="m121 66 18 1m-26 78 17 5" />
-            <path d="m121 66 30 21 30-7m-24-13 27 40 26-7" />
-            <path d="m113 145 63 31-31 84m-32-115-41 29 19 82" />
-            <path d="m145 260 21 1m-92-5 20 1" />
-            <circle cx="130" cy="34" r="18" />
+          <g stroke="#22cabb" strokeLinecap="round" strokeLinejoin="round" strokeWidth="5">
+            <path d="M162 99 205 137 250 128" />
+            <path d="M162 99 130 215 216 252 173 349" />
           </g>
-          <g fill="#83c6ce" stroke="#285f6b" strokeWidth="2.5">
-            <circle cx="130" cy="66" r="5" />
-            <circle cx="121" cy="66" r="4.5" />
-            <circle cx="139" cy="67" r="4.5" />
-            <circle cx="151" cy="87" r="5" />
-            <circle cx="181" cy="80" r="5" />
-            <circle cx="166" cy="108" r="5" />
-            <circle cx="192" cy="101" r="5" />
-            <circle cx="113" cy="145" r="5" />
-            <circle cx="104" cy="143" r="4.5" />
-            <circle cx="130" cy="150" r="4.5" />
-            <circle cx="176" cy="176" r="5" />
-            <circle cx="145" cy="260" r="5" />
-            <circle cx="72" cy="191" r="5" />
-            <circle cx="91" cy="256" r="5" />
+          <path
+            d="M190 245 A29 29 0 0 0 200 221"
+            fill="none"
+            stroke="#ffbf43"
+            strokeLinecap="round"
+            strokeWidth="3.5"
+          />
+          <g fill="#071114" stroke="#55e0ed" strokeWidth="3">
+            <circle cx="162" cy="59" r="24" />
+            <circle cx="162" cy="99" r="8" />
+            <circle cx="205" cy="137" r="8" />
+            <circle cx="250" cy="128" r="8" />
+            <circle cx="130" cy="215" r="8" />
+            <circle cx="216" cy="252" r="9" />
+            <circle cx="173" cy="349" r="9" />
           </g>
         </svg>
-        <div className="absolute bottom-4 left-4 right-4 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-brand-teal/30 bg-brand-dark/90 px-4 py-3 text-xs backdrop-blur">
-          <span className="flex items-center gap-2 text-gray-200">
-            <span className="h-2 w-2 rounded-full bg-brand-cyan" />
-            MediaPipe pose landmarks
-          </span>
-          <span className="text-brand-cyan">Processed in your browser</span>
+        <div className="absolute right-3 top-3 rounded-[10px] border border-[#164148] bg-[#071114]/95 px-[10px] py-[7px]">
+          <p className="text-[9px] leading-3 text-gray-500">Form</p>
+          <p className="text-[13px] font-semibold leading-[17px] text-[#55e0c7]">Good depth</p>
         </div>
-      </div>
-      <div className="relative mt-3 flex items-center gap-2 px-1 text-xs text-gray-400">
-        <ShieldCheck className="h-4 w-4 shrink-0 text-brand-cyan" />
-        Camera frames stay on your device
+        <div className="absolute bottom-0 left-0 flex h-[55px] w-[42px] flex-col justify-center rounded-[9px] border border-[#164148] bg-[#071114]/95 px-[10px]">
+          <p className="text-[9px] leading-3 text-gray-500">Reps</p>
+          <p className="text-xl font-bold leading-5 text-gray-100">8</p>
+        </div>
       </div>
     </div>
   );
