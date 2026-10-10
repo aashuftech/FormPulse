@@ -9,11 +9,26 @@ export const TARGET_GOALS = [
 ] as const;
 
 export type TargetGoal = (typeof TARGET_GOALS)[number];
+export const USER_ROLES = ['user', 'admin'] as const;
+export type UserRole = (typeof USER_ROLES)[number];
+export const FORM_STRICTNESS = ['Relaxed', 'Standard', 'Strict'] as const;
+export const UNIT_SYSTEMS = ['Metric (kg)', 'Imperial (lbs)'] as const;
+
+export interface IUserSettings {
+  voiceGuidance: boolean;
+  vibrationAlerts: boolean;
+  formStrictness: (typeof FORM_STRICTNESS)[number];
+  unitSystem: (typeof UNIT_SYSTEMS)[number];
+  emailNotifications: boolean;
+  theme: 'dark';
+}
 
 export interface IUser extends Document {
   name: string;
   email: string;
   passwordHash: string;
+  emailVerified: boolean;
+  role: UserRole;
   athleteLevel: 'Beginner' | 'Intermediate' | 'Advanced';
   experienceYears: number;
   targetGoal: TargetGoal;
@@ -22,7 +37,20 @@ export interface IUser extends Document {
   joinedDate: Date;
   streakDays: number;
   weeklyProgressScore: number;
+  settings: IUserSettings;
 }
+
+const userSettingsSchema = new Schema<IUserSettings>(
+  {
+    voiceGuidance: { type: Boolean, default: true },
+    vibrationAlerts: { type: Boolean, default: true },
+    formStrictness: { type: String, enum: FORM_STRICTNESS, default: 'Standard' },
+    unitSystem: { type: String, enum: UNIT_SYSTEMS, default: 'Metric (kg)' },
+    emailNotifications: { type: Boolean, default: true },
+    theme: { type: String, enum: ['dark'], default: 'dark' },
+  },
+  { _id: false },
+);
 
 const userSchema = new Schema<IUser>(
   {
@@ -36,6 +64,9 @@ const userSchema = new Schema<IUser>(
       maxlength: 254,
     },
     passwordHash: { type: String, required: true, select: false },
+    // Missing values on legacy accounts default to verified; registration explicitly sets false.
+    emailVerified: { type: Boolean, required: true, default: true },
+    role: { type: String, enum: USER_ROLES, required: true, default: 'user' },
     athleteLevel: {
       type: String,
       enum: ['Beginner', 'Intermediate', 'Advanced'],
@@ -48,6 +79,7 @@ const userSchema = new Schema<IUser>(
     joinedDate: { type: Date, default: Date.now },
     streakDays: { type: Number, min: 0, default: 0 },
     weeklyProgressScore: { type: Number, min: 0, max: 100, default: 0 },
+    settings: { type: userSettingsSchema, default: () => ({}) },
   },
   { timestamps: true },
 );

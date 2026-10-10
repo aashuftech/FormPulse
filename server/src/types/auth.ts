@@ -4,6 +4,7 @@ export interface UserProfileResponse {
   id: string;
   name: string;
   email: string;
+  role: IUser['role'];
   athleteLevel: IUser['athleteLevel'];
   experienceYears: number;
   targetGoal: IUser['targetGoal'];
@@ -16,4 +17,5 @@ export interface UserProfileResponse {
 
 export interface AuthTokenPayload {
   sub: string;
+  sid: string;
 }

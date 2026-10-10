@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import {
   LayoutDashboard,
@@ -9,11 +10,12 @@ import {
   User,
   Settings,
   Activity,
-  Flame,
+  Dumbbell,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ROUTES } from '@/lib/constants';
 import { useAuth } from '@/hooks/useAuth';
+import { workoutService, type WorkoutProgress } from '@/services/workoutService';
 
 interface NavItem {
   name: string;
@@ -34,7 +36,29 @@ const navItems: NavItem[] = [
 
 export function Sidebar({ className }: { className?: string }) {
   const { user } = useAuth();
-  const weeklyProgress = user?.weeklyProgressScore ?? 0;
+  const [progress, setProgress] = useState<WorkoutProgress | null>(null);
+  useEffect(() => {
+    let mounted = true;
+    workoutService
+      .getProgress()
+      .then(result => {
+        if (mounted) setProgress(result);
+      })
+      .catch(() => undefined);
+    return () => {
+      mounted = false;
+    };
+  }, []);
+  const now = new Date();
+  const currentWeekStart = new Date(
+    Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()),
+  );
+  currentWeekStart.setUTCDate(
+    currentWeekStart.getUTCDate() - ((currentWeekStart.getUTCDay() + 6) % 7),
+  );
+  const weeklyFormScore = progress?.weeklyProgress.find(
+    week => week.weekStart === currentWeekStart.toISOString().slice(0, 10),
+  )?.averageFormScore;
   const userInitials = (user?.name ?? 'User')
     .trim()
     .split(/\s+/)
@@ -66,16 +90,18 @@ export function Sidebar({ className }: { className?: string }) {
       {/* Today's Progress Card */}
       <div className="mx-3 my-4 rounded-xl border border-brand-teal/25 bg-brand-dark/30 p-4">
         <div className="flex items-center justify-between">
-          <span className="font-sans text-xs font-medium text-gray-300">Today's Progress</span>
-          <span className="font-sans text-sm font-bold text-brand-cyan">{weeklyProgress}%</span>
+          <span className="font-sans text-xs font-medium text-gray-300">Weekly Form Score</span>
+          <span className="font-sans text-sm font-bold text-brand-cyan">
+            {weeklyFormScore === undefined ? '—' : `${weeklyFormScore}%`}
+          </span>
         </div>
         <div className="mt-2.5 h-2 w-full overflow-hidden rounded-full border border-brand-teal/20 bg-brand-black">
           <div
             className="h-full rounded-full bg-brand-cyan"
-            style={{ width: `${weeklyProgress}%` }}
+            style={{ width: `${weeklyFormScore ?? 0}%` }}
           />
         </div>
-        <p className="mt-2 text-[11px] text-gray-400">Your weekly progress</p>
+        <p className="mt-2 text-[11px] text-gray-400">Average from completed workouts</p>
       </div>
 
       {/* Navigation Links */}
@@ -122,9 +148,12 @@ export function Sidebar({ className }: { className?: string }) {
             <p className="font-sans text-xs text-gray-400">{user?.email}</p>
           </div>
         </div>
-        <div className="flex items-center gap-1.5 text-amber-400">
-          <Flame className="h-4 w-4" />
-          <span className="text-xs font-semibold">{user?.streakDays ?? 0}d</span>
+        <div
+          className="flex items-center gap-1.5 text-amber-400"
+          title="Lifetime completed workouts"
+        >
+          <Dumbbell className="h-4 w-4" />
+          <span className="text-xs font-semibold">{progress?.totalWorkouts ?? '—'}</span>
         </div>
       </div>
     </aside>

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import type { UserProfile } from '@/types';
+import type { UserProfile, UserProfileUpdate } from '@/types';
 import { authApi } from '@/services/authApi';
+import { userService } from '@/services/userService';
 import { AuthContext } from './auth-context-def';
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -40,7 +41,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   ): Promise<void> => {
     authRequestVersion.current += 1;
     try {
-      setUser(await authApi.register(name, email, password, targetGoal));
+      await authApi.register(name, email, password, targetGoal);
+      setUser(null);
     } finally {
       setIsLoading(false);
     }
@@ -48,15 +50,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = async (): Promise<void> => {
     authRequestVersion.current += 1;
-    await authApi.logout().catch(() => undefined);
     setUser(null);
     setIsLoading(false);
+    await authApi.logout().catch(() => undefined);
   };
 
-  const updateUser = (data: Partial<UserProfile>) => {
-    if (user) {
-      setUser({ ...user, ...data });
-    }
+  const updateUser = async (data: UserProfileUpdate): Promise<void> => {
+    if (!user) throw new Error('Authentication required');
+    const requestVersion = authRequestVersion.current;
+    const updatedUser = await userService.updateProfile(data);
+    if (requestVersion === authRequestVersion.current) setUser(updatedUser);
   };
 
   return (

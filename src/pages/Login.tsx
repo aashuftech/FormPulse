@@ -5,14 +5,35 @@ import { Input } from '@/components/primitives/Input';
 import { Button } from '@/components/primitives/Button';
 import { useAuth } from '@/hooks/useAuth';
 import { ROUTES } from '@/lib/constants';
+import { authApi } from '@/services/authApi';
 
 export function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [resendMessage, setResendMessage] = useState('');
+  const [resendError, setResendError] = useState('');
+  const [isResending, setIsResending] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
+
+  const handleResendVerification = async () => {
+    setResendError('');
+    setResendMessage('');
+    setIsResending(true);
+    try {
+      setResendMessage(await authApi.resendVerification(email));
+    } catch (requestError) {
+      setResendError(
+        requestError instanceof Error
+          ? requestError.message
+          : 'Unable to resend verification email',
+      );
+    } finally {
+      setIsResending(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -66,9 +87,9 @@ export function LoginPage() {
             />
             <span className="text-gray-300">Remember me</span>
           </label>
-          <a href="#reset" className="text-brand-cyan hover:underline">
+          <Link to={ROUTES.FORGOT_PASSWORD} className="text-brand-cyan hover:underline">
             Forgot password?
-          </a>
+          </Link>
         </div>
 
         <Button
@@ -82,6 +103,19 @@ export function LoginPage() {
           Log In
         </Button>
       </form>
+
+      <div className="space-y-2 text-center font-sans text-sm text-gray-400">
+        <button
+          type="button"
+          className="text-brand-cyan hover:underline disabled:opacity-50"
+          disabled={isResending || !email}
+          onClick={() => void handleResendVerification()}
+        >
+          {isResending ? 'Sending…' : 'Resend verification email'}
+        </button>
+        {resendMessage && <p>{resendMessage}</p>}
+        {resendError && <p className="text-red-400">{resendError}</p>}
+      </div>
 
       <div className="border-t border-brand-teal/20 pt-4 text-center font-sans text-sm text-gray-400">
         <span>Don't have an account? </span>

@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import type { UserProfile } from '@/types';
+import type { UserProfile, UserProfileUpdate } from '@/types';
 
 export interface AuthContextType {
   user: UserProfile | null;
@@ -8,7 +8,7 @@ export interface AuthContextType {
   login: (email: string, pass: string) => Promise<void>;
   register: (name: string, email: string, pass: string, targetGoal: string) => Promise<void>;
   logout: () => Promise<void>;
-  updateUser: (data: Partial<UserProfile>) => void;
+  updateUser: (data: UserProfileUpdate) => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);

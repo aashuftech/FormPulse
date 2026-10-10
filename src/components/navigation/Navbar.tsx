@@ -1,12 +1,20 @@
 import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, Bell, PlayCircle } from 'lucide-react';
 import { Button } from '@/components/primitives/Button';
 import { ROUTES } from '@/lib/constants';
+import { useAuth } from '@/hooks/useAuth';
 
 export function Navbar({ onMobileMenuToggle }: { onMobileMenuToggle?: () => void }) {
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { logout } = useAuth();
+
+  const handleLogout = async () => {
+    await logout();
+    navigate(ROUTES.HOME, { replace: true });
+  };
 
   const getPageTitle = (pathname: string) => {
     switch (pathname) {
@@ -64,6 +72,9 @@ export function Navbar({ onMobileMenuToggle }: { onMobileMenuToggle?: () => void
             Start Workout
           </Button>
         </Link>
+        <Button variant="outline" size="sm" onClick={() => void handleLogout()}>
+          Log Out
+        </Button>
 
         {/* Notifications Trigger */}
         <div className="relative">
@@ -72,13 +83,17 @@ export function Navbar({ onMobileMenuToggle }: { onMobileMenuToggle?: () => void
             onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
             className="relative rounded-lg border border-brand-teal/25 p-2 text-gray-400 hover:bg-brand-dark/50 hover:text-white"
             aria-label="Notifications"
+            aria-expanded={isNotificationsOpen}
+            aria-controls="notifications-panel"
           >
             <Bell className="h-4 w-4" />
-            <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-brand-cyan" />
           </button>
 
           {isNotificationsOpen && (
-            <div className="absolute right-0 z-50 mt-2 w-72 rounded-xl border border-brand-teal/30 bg-brand-dark p-4 text-xs shadow-card">
+            <div
+              id="notifications-panel"
+              className="absolute right-0 z-50 mt-2 w-72 rounded-xl border border-brand-teal/30 bg-brand-dark p-4 text-xs shadow-card"
+            >
               <div className="flex items-center justify-between border-b border-brand-teal/20 pb-2.5">
                 <span className="font-display text-sm font-bold leading-tight tracking-normal text-white">
                   Notifications
@@ -87,24 +102,12 @@ export function Navbar({ onMobileMenuToggle }: { onMobileMenuToggle?: () => void
                   type="button"
                   onClick={() => setIsNotificationsOpen(false)}
                   className="text-gray-400 hover:text-white"
+                  aria-label="Close notifications"
                 >
                   <X className="h-4 w-4" />
                 </button>
               </div>
-              <div className="space-y-2.5 py-2.5">
-                <div className="rounded-lg border border-brand-teal/20 bg-brand-dark/60 p-2.5">
-                  <p className="text-xs font-medium text-white">Workout Goal Reached</p>
-                  <p className="mt-0.5 text-xs text-gray-400">
-                    You hit 94% average form score on your last session.
-                  </p>
-                </div>
-                <div className="rounded-lg border border-brand-teal/20 bg-brand-dark/60 p-2.5">
-                  <p className="text-xs font-medium text-white">New Challenge Available</p>
-                  <p className="mt-0.5 text-xs text-gray-400">
-                    October Volume Challenge is now open for enrollment.
-                  </p>
-                </div>
-              </div>
+              <div className="py-4 text-center text-xs text-gray-400">No notifications yet.</div>
             </div>
           )}
         </div>

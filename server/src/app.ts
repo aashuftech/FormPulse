@@ -12,6 +12,8 @@ import { apiRoutes } from './routes/index.js';
 
 export const app = express();
 
+app.set('trust proxy', env.trustProxyHops);
+
 app.use(
   helmet({
     hsts: env.nodeEnv === 'production' ? undefined : false,

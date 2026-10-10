@@ -214,7 +214,7 @@ export function ExercisesPage() {
                   <Button
                     size="sm"
                     variant="primary"
-                    onClick={() => startSession(`${exercise.name} Routine`)}
+                    onClick={() => startSession(`${exercise.name} Routine`, [exercise.id])}
                     leftIcon={<PlayCircle className="h-3.5 w-3.5" />}
                   >
                     Start Exercise

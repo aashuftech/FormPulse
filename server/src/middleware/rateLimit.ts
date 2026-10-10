@@ -16,3 +16,7 @@ function createLimiter(windowMs: number, limit: number) {
 export const apiRateLimit = createLimiter(15 * 60 * 1000, 300);
 export const loginRateLimit = createLimiter(15 * 60 * 1000, 10);
 export const registerRateLimit = createLimiter(60 * 60 * 1000, 5);
+export const verifyEmailRateLimit = createLimiter(15 * 60 * 1000, 10);
+export const resendVerificationRateLimit = createLimiter(60 * 60 * 1000, 5);
+export const forgotPasswordRateLimit = createLimiter(60 * 60 * 1000, 5);
+export const resetPasswordRateLimit = createLimiter(15 * 60 * 1000, 10);

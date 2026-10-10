@@ -1,22 +1,20 @@
-import type { UserProfile, UserSettings } from '@/types';
-import { MOCK_USER, MOCK_SETTINGS } from './mockData';
+import type { UserProfile, UserProfileUpdate, UserSettings } from '@/types';
+import { authApi } from './authApi';
 
 export const userService = {
   async getProfile(): Promise<UserProfile> {
-    return Promise.resolve({ ...MOCK_USER });
+    return authApi.currentUser();
   },
 
-  async updateProfile(updates: Partial<UserProfile>): Promise<UserProfile> {
-    Object.assign(MOCK_USER, updates);
-    return Promise.resolve({ ...MOCK_USER });
+  async updateProfile(updates: UserProfileUpdate): Promise<UserProfile> {
+    return authApi.updateProfile(updates);
   },
 
   async getSettings(): Promise<UserSettings> {
-    return Promise.resolve({ ...MOCK_SETTINGS });
+    return authApi.getSettings();
   },
 
   async updateSettings(updates: Partial<UserSettings>): Promise<UserSettings> {
-    Object.assign(MOCK_SETTINGS, updates);
-    return Promise.resolve({ ...MOCK_SETTINGS });
+    return authApi.updateSettings(updates);
   },
 };

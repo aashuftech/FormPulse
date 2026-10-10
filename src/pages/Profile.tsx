@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Edit3 } from 'lucide-react';
 import { PageContainer } from '@/components/primitives/PageContainer';
 import { PageHeading, SectionTitle } from '@/components/primitives/Typography';
@@ -8,6 +8,8 @@ import { Button } from '@/components/primitives/Button';
 import { Input } from '@/components/primitives/Input';
 import { useAuth } from '@/hooks/useAuth';
 import type { UserProfile } from '@/types';
+import { workoutService, type WorkoutProgress } from '@/services/workoutService';
+import { formatDuration } from '@/utils/formatters';
 
 export function ProfilePage() {
   const { user, updateUser } = useAuth();
@@ -16,24 +18,108 @@ export function ProfilePage() {
   const [weight, setWeight] = useState(user?.weightKg?.toString() || '');
   const [height, setHeight] = useState(user?.heightCm?.toString() || '');
   const [goal, setGoal] = useState<UserProfile['targetGoal']>(user?.targetGoal || 'Build Muscle');
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const [saveMessage, setSaveMessage] = useState<string | null>(null);
+  const [progress, setProgress] = useState<WorkoutProgress | null>(null);
+  const [isLoadingProgress, setIsLoadingProgress] = useState(true);
+  const [progressError, setProgressError] = useState<string | null>(null);
 
-  const handleSave = (e: React.FormEvent) => {
+  useEffect(() => {
+    if (!user) return;
+    setName(user.name);
+    setWeight(user.weightKg ? String(user.weightKg) : '');
+    setHeight(user.heightCm ? String(user.heightCm) : '');
+    setGoal(user.targetGoal);
+  }, [user]);
+
+  useEffect(() => {
+    let mounted = true;
+    workoutService
+      .getProgress()
+      .then(result => {
+        if (mounted) setProgress(result);
+      })
+      .catch(error => {
+        if (mounted) {
+          setProgressError(
+            error instanceof Error ? error.message : 'Personal records could not be loaded.',
+          );
+        }
+      })
+      .finally(() => {
+        if (mounted) setIsLoadingProgress(false);
+      });
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    updateUser({
-      name,
-      weightKg: Number(weight) || 0,
-      heightCm: Number(height) || 0,
-      targetGoal: goal,
-    });
-    setIsEditing(false);
+    setIsSaving(true);
+    setSaveError(null);
+    setSaveMessage(null);
+    try {
+      await updateUser({
+        name: name.trim(),
+        weightKg: Number(weight),
+        heightCm: Number(height),
+        targetGoal: goal,
+      });
+      setSaveMessage('Profile details saved.');
+      setIsEditing(false);
+    } catch (error) {
+      setSaveError(error instanceof Error ? error.message : 'Unable to save profile details.');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
-  const personalRecords: {
-    movement: string;
-    record: string;
-    setsReps: string;
-    formScore: string;
-  }[] = [];
+  const records = progress?.personalRecords;
+  const personalRecords: { movement: string; record: string; detail: string }[] = [];
+  if (records?.highestRepsPerSet !== undefined) {
+    personalRecords.push({
+      movement: 'Highest reps per set',
+      record: `${records.highestRepsPerSet} reps`,
+      detail: 'Personal best',
+    });
+  }
+  if (records?.longestPlankSeconds !== undefined) {
+    personalRecords.push({
+      movement: 'Longest plank',
+      record: formatDuration(records.longestPlankSeconds),
+      detail: 'Personal best',
+    });
+  }
+  if (records?.bestFormScore !== undefined) {
+    personalRecords.push({
+      movement: 'Best form score',
+      record: `${records.bestFormScore}%`,
+      detail: 'Estimated coaching score',
+    });
+  }
+  if (records?.highestWeightKg !== undefined) {
+    personalRecords.push({
+      movement: 'Highest set weight',
+      record: `${records.highestWeightKg} kg`,
+      detail: 'Personal best',
+    });
+  }
+  if (records?.highestSetVolumeKg !== undefined) {
+    personalRecords.push({
+      movement: 'Highest set volume',
+      record: `${records.highestSetVolumeKg.toLocaleString()} kg`,
+      detail: 'Personal best',
+    });
+  }
+  if (records?.highestWorkoutVolumeKg !== undefined) {
+    personalRecords.push({
+      movement: 'Highest workout volume',
+      record: `${records.highestWorkoutVolumeKg.toLocaleString()} kg`,
+      detail: 'Personal best',
+    });
+  }
   const earnedBadges: { title: string; desc: string }[] = [];
 
   return (
@@ -45,7 +131,16 @@ export function ProfilePage() {
         <Button
           size="sm"
           variant={isEditing ? 'ghost' : 'outline'}
-          onClick={() => setIsEditing(!isEditing)}
+          onClick={() => {
+            if (isEditing && user) {
+              setName(user.name);
+              setWeight(user.weightKg ? String(user.weightKg) : '');
+              setHeight(user.heightCm ? String(user.heightCm) : '');
+              setGoal(user.targetGoal);
+              setSaveError(null);
+            }
+            setIsEditing(!isEditing);
+          }}
           leftIcon={<Edit3 className="h-3.5 w-3.5" />}
         >
           {isEditing ? 'Cancel Edit' : 'Edit Details'}
@@ -79,21 +174,21 @@ export function ProfilePage() {
           {/* Quick Metrics */}
           <div className="grid grid-cols-3 gap-2 border-t border-brand-teal/20 pt-4 text-center">
             <div className="rounded-xl border border-brand-teal/15 bg-brand-black/60 p-3">
-              <span className="block text-xs font-medium text-gray-400">Streak</span>
+              <span className="block text-xs font-medium text-gray-400">Workouts</span>
               <span className="mt-0.5 block font-sans text-base font-bold text-white">
-                {user?.streakDays} Days
+                {isLoadingProgress ? '…' : (progress?.totalWorkouts ?? 0)} Completed
               </span>
             </div>
             <div className="rounded-xl border border-brand-teal/15 bg-brand-black/60 p-3">
               <span className="block text-xs font-medium text-gray-400">Weight</span>
               <span className="mt-0.5 block font-sans text-base font-bold text-brand-cyan">
-                {user?.weightKg} kg
+                {user?.weightKg ? `${user.weightKg} kg` : '—'}
               </span>
             </div>
             <div className="rounded-xl border border-brand-teal/15 bg-brand-black/60 p-3">
               <span className="block text-xs font-medium text-gray-400">Height</span>
               <span className="mt-0.5 block font-sans text-base font-bold text-white">
-                {user?.heightCm} cm
+                {user?.heightCm ? `${user.heightCm} cm` : '—'}
               </span>
             </div>
           </div>
@@ -133,10 +228,26 @@ export function ProfilePage() {
                   <option value="Improve Mobility">Improve Mobility</option>
                 </select>
               </div>
-              <Button type="submit" variant="primary" size="sm" className="mt-2 w-full">
-                Save Body Details
+              <Button
+                type="submit"
+                variant="primary"
+                size="sm"
+                className="mt-2 w-full"
+                disabled={isSaving}
+              >
+                {isSaving ? 'Saving…' : 'Save Body Details'}
               </Button>
+              {saveError && (
+                <p role="alert" className="text-xs text-red-400">
+                  {saveError}
+                </p>
+              )}
             </form>
+          )}
+          {saveMessage && (
+            <p role="status" className="text-xs text-emerald-400">
+              {saveMessage}
+            </p>
           )}
 
           {/* Earned Badges Showcase */}
@@ -169,8 +280,19 @@ export function ProfilePage() {
         <div className="space-y-4 lg:col-span-7">
           <SectionTitle>Personal Records</SectionTitle>
 
+          {progressError && (
+            <p role="alert" className="text-sm text-red-400">
+              {progressError}
+            </p>
+          )}
+
           <div className="space-y-3">
-            {personalRecords.length === 0 && (
+            {isLoadingProgress && (
+              <Card className="border-brand-teal/20 bg-brand-dark/25 p-5 text-sm text-gray-400">
+                Loading your personal records…
+              </Card>
+            )}
+            {!isLoadingProgress && !progressError && personalRecords.length === 0 && (
               <Card className="border-brand-teal/20 bg-brand-dark/25 p-5 text-sm text-gray-400">
                 Your personal records will appear after you complete workouts.
               </Card>
@@ -182,13 +304,13 @@ export function ProfilePage() {
                     <h4 className="font-display text-base font-bold leading-tight tracking-normal text-white">
                       {pr.movement}
                     </h4>
-                    <p className="text-xs text-gray-400">Best: {pr.setsReps}</p>
+                    <p className="text-xs text-gray-400">{pr.detail}</p>
                   </div>
 
                   <div className="text-right">
                     <div className="font-sans text-xl font-bold text-brand-cyan">{pr.record}</div>
                     <Badge variant="cyan" size="sm">
-                      {pr.formScore} Form Quality
+                      Personal Record
                     </Badge>
                   </div>
                 </div>

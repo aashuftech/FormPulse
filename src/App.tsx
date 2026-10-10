@@ -8,6 +8,9 @@ import {
   HomePage,
   LoginPage,
   RegisterPage,
+  VerifyEmailPage,
+  ForgotPasswordPage,
+  ResetPasswordPage,
   DashboardPage,
   WorkoutPage,
   ExercisesPage,
@@ -34,6 +37,9 @@ export function App() {
           <Route element={<AuthLayout />}>
             <Route path={ROUTES.LOGIN} element={<LoginPage />} />
             <Route path={ROUTES.REGISTER} element={<RegisterPage />} />
+            <Route path={ROUTES.VERIFY_EMAIL} element={<VerifyEmailPage />} />
+            <Route path={ROUTES.FORGOT_PASSWORD} element={<ForgotPasswordPage />} />
+            <Route path={ROUTES.RESET_PASSWORD} element={<ResetPasswordPage />} />
           </Route>
 
           {/* Main Authenticated Dashboard Shell */}

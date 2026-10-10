@@ -1,9 +1,18 @@
-import { Outlet, Link } from 'react-router-dom';
+import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { Activity, ArrowRight, ShieldCheck, Zap } from 'lucide-react';
 import { Button } from '@/components/primitives/Button';
 import { ROUTES } from '@/lib/constants';
+import { useAuth } from '@/hooks/useAuth';
 
 export function PublicLayout() {
+  const { isAuthenticated, isLoading, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await logout();
+    navigate(ROUTES.HOME, { replace: true });
+  };
+
   return (
     <div className="flex min-h-screen flex-col bg-brand-black font-sans text-brand-white selection:bg-brand-cyan/20 selection:text-brand-white">
       {/* 1. Navbar */}
@@ -32,20 +41,28 @@ export function PublicLayout() {
           </div>
 
           <div className="flex items-center gap-3">
-            <Link to={ROUTES.LOGIN}>
-              <Button variant="ghost" size="sm">
-                Log In
+            {isLoading ? null : isAuthenticated ? (
+              <Button variant="primary" size="sm" onClick={() => void handleLogout()}>
+                Log Out
               </Button>
-            </Link>
-            <Link to={ROUTES.REGISTER}>
-              <Button
-                variant="primary"
-                size="sm"
-                rightIcon={<ArrowRight className="h-3.5 w-3.5" />}
-              >
-                Get Started
-              </Button>
-            </Link>
+            ) : (
+              <>
+                <Link to={ROUTES.LOGIN}>
+                  <Button variant="ghost" size="sm">
+                    Log In
+                  </Button>
+                </Link>
+                <Link to={ROUTES.REGISTER}>
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    rightIcon={<ArrowRight className="h-3.5 w-3.5" />}
+                  >
+                    Get Started
+                  </Button>
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </header>
