@@ -20,12 +20,12 @@ import { ROUTES } from '@/lib/constants';
 function PosePreview() {
   return (
     <div className="home-hero-visual relative flex aspect-[0.91/1] h-full w-full flex-col overflow-hidden rounded-[22px] border border-[#102d32] bg-[#050b0d] p-[14px] shadow-[0_18px_60px_rgba(0,0,0,0.18)] lg:aspect-auto">
-      <div className="flex h-[14px] shrink-0 items-center justify-between text-[10px] leading-[14px] text-gray-500">
+      <div className="flex h-4 shrink-0 items-center justify-between text-xs font-medium leading-4 text-gray-300">
         <span className="flex items-center gap-1.5">
-          <span className="h-1 w-1 rounded-full bg-gray-500" />
+          <span className="h-1.5 w-1.5 rounded-full bg-brand-cyan" />
           Live camera
         </span>
-        <span>Squat</span>
+        <span className="text-gray-200">Squats</span>
       </div>
 
       <div className="home-pose-grid relative mt-[5px] min-h-0 flex-1 overflow-hidden rounded-[15px] border border-[#102d32]">
