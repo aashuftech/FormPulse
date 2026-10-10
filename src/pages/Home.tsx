@@ -19,7 +19,7 @@ import { ROUTES } from '@/lib/constants';
 
 function PosePreview() {
   return (
-    <div className="home-hero-visual relative flex aspect-[0.91/1] w-full flex-col overflow-hidden rounded-[22px] border border-[#102d32] bg-[#050b0d] p-[14px] shadow-[0_18px_60px_rgba(0,0,0,0.18)]">
+    <div className="home-hero-visual relative flex aspect-[0.91/1] h-full w-full flex-col overflow-hidden rounded-[22px] border border-[#102d32] bg-[#050b0d] p-[14px] shadow-[0_18px_60px_rgba(0,0,0,0.18)] lg:aspect-auto">
       <div className="flex h-[14px] shrink-0 items-center justify-between text-[10px] leading-[14px] text-gray-500">
         <span className="flex items-center gap-1.5">
           <span className="h-1 w-1 rounded-full bg-gray-500" />
@@ -61,10 +61,6 @@ function PosePreview() {
         <div className="absolute right-3 top-3 rounded-[10px] border border-[#164148] bg-[#071114]/95 px-[10px] py-[7px]">
           <p className="text-[9px] leading-3 text-gray-500">Form</p>
           <p className="text-[13px] font-semibold leading-[17px] text-[#55e0c7]">Good depth</p>
-        </div>
-        <div className="absolute bottom-0 left-0 flex h-[55px] w-[42px] flex-col justify-center rounded-[9px] border border-[#164148] bg-[#071114]/95 px-[10px]">
-          <p className="text-[9px] leading-3 text-gray-500">Reps</p>
-          <p className="text-xl font-bold leading-5 text-gray-100">8</p>
         </div>
       </div>
     </div>
@@ -112,7 +108,7 @@ export function HomePage() {
     >
       <section className="relative border-b border-brand-teal/20 px-4 pb-20 pt-14 sm:px-6 md:pb-28 md:pt-20 lg:px-8">
         <div className="pointer-events-none absolute left-1/4 top-1/4 h-[420px] w-[420px] rounded-full bg-brand-teal/10 blur-[120px]" />
-        <div className="relative mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-start lg:gap-10">
+        <div className="relative mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-stretch lg:gap-10">
           <div className="space-y-7 text-center lg:text-left" data-reveal>
             <Badge variant="outline">
               <span className="mr-1.5 inline-flex h-1.5 w-1.5 rounded-full bg-brand-cyan" />
@@ -150,7 +146,7 @@ export function HomePage() {
               </span>
             </div>
           </div>
-          <div data-reveal>
+          <div className="h-full" data-reveal>
             <PosePreview />
           </div>
         </div>
