@@ -21,8 +21,7 @@ import { ROUTES } from '@/lib/constants';
 
 function PosePreview() {
   return (
-    <div className="home-hero-visual bg-subtle-grid relative flex aspect-[0.91/1] w-full flex-col overflow-hidden rounded-3xl border border-brand-teal/40 bg-brand-black p-4 shadow-[0_30px_100px_rgba(19,51,54,0.45)] sm:p-6">
-      <div className="absolute inset-0 bg-gradient-to-br from-brand-cyan/10 via-transparent to-transparent" />
+    <div className="home-hero-visual bg-subtle-grid relative flex aspect-[0.91/1] w-full flex-col overflow-hidden rounded-3xl border border-brand-teal/40 bg-brand-black p-4 shadow-[0_24px_72px_rgba(19,51,54,0.2)] sm:p-6">
       <div className="relative flex items-center justify-between gap-3 border-b border-brand-teal/30 pb-4">
         <div className="flex items-center gap-3">
           <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-brand-cyan/30 bg-brand-dark/80 text-brand-cyan">
@@ -37,43 +36,37 @@ function PosePreview() {
       </div>
 
       <div className="relative mt-4 grid min-h-0 flex-1 place-items-center overflow-hidden rounded-2xl border border-brand-teal/25 bg-brand-black/75">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(54,125,138,0.14),transparent_65%)]" />
         <svg
           aria-label="Illustration of a pose landmark skeleton"
-          className="relative h-[78%] max-h-[320px] w-full max-w-[300px] drop-shadow-[0_0_18px_rgba(54,125,138,0.45)]"
+          className="relative h-[78%] max-h-[320px] w-full max-w-[300px]"
           fill="none"
           role="img"
           viewBox="0 0 240 300"
         >
-          <g stroke="#55c2d0" strokeLinecap="round" strokeLinejoin="round" strokeWidth="4">
-            <path d="M119 53 103 105 81 139 59 176 44 229" />
-            <path d="m103 105 30 35 37 16 33 22 10 48" />
-            <path d="m103 105 43 1 26 31 28 19" />
-            <path d="m81 139 36 22 24 33 26 35" />
-            <path d="m117 161-35 17-28 21" />
-            <path d="m117 161 42 3 26 23" />
-            <path d="M113 46c0-12 7-20 17-20s17 8 17 20-7 20-17 20-17-8-17-20Z" />
+          <g stroke="#4b9eaa" strokeLinecap="round" strokeLinejoin="round" strokeWidth="3.5">
+            {/* Side-view squat landmarks: head, shoulders, arms, torso, hips and both legs. */}
+            <path d="M130 50 130 66 113 145" />
+            <path d="m121 66 18 1m-26 78 17 5" />
+            <path d="m121 66 30 21 30-7m-24-13 27 40 26-7" />
+            <path d="m113 145 63 31-31 84m-32-115-41 29 19 82" />
+            <path d="m145 260 21 1m-92-5 20 1" />
+            <circle cx="130" cy="34" r="18" />
           </g>
-          <g fill="#b8f3f3" stroke="#367d8a" strokeWidth="3">
-            <circle cx="130" cy="46" r="8" />
-            <circle cx="103" cy="105" r="7" />
-            <circle cx="81" cy="139" r="7" />
-            <circle cx="59" cy="176" r="7" />
-            <circle cx="44" cy="229" r="7" />
-            <circle cx="133" cy="140" r="7" />
-            <circle cx="170" cy="156" r="7" />
-            <circle cx="203" cy="173" r="7" />
-            <circle cx="146" cy="106" r="7" />
-            <circle cx="172" cy="137" r="7" />
-            <circle cx="200" cy="155" r="7" />
-            <circle cx="117" cy="161" r="7" />
-            <circle cx="141" cy="194" r="7" />
-            <circle cx="167" cy="229" r="7" />
-            <circle cx="82" cy="178" r="7" />
-            <circle cx="54" cy="199" r="7" />
-            <circle cx="159" cy="164" r="7" />
-            <circle cx="185" cy="187" r="7" />
-            <circle cx="209" cy="235" r="7" />
+          <g fill="#83c6ce" stroke="#285f6b" strokeWidth="2.5">
+            <circle cx="130" cy="66" r="5" />
+            <circle cx="121" cy="66" r="4.5" />
+            <circle cx="139" cy="67" r="4.5" />
+            <circle cx="151" cy="87" r="5" />
+            <circle cx="181" cy="80" r="5" />
+            <circle cx="166" cy="108" r="5" />
+            <circle cx="192" cy="101" r="5" />
+            <circle cx="113" cy="145" r="5" />
+            <circle cx="104" cy="143" r="4.5" />
+            <circle cx="130" cy="150" r="4.5" />
+            <circle cx="176" cy="176" r="5" />
+            <circle cx="145" cy="260" r="5" />
+            <circle cx="72" cy="191" r="5" />
+            <circle cx="91" cy="256" r="5" />
           </g>
         </svg>
         <div className="absolute bottom-4 left-4 right-4 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-brand-teal/30 bg-brand-dark/90 px-4 py-3 text-xs backdrop-blur">
